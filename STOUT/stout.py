@@ -40,6 +40,19 @@ reloaded_forward = tf.saved_model.load(default_path.as_posix() + "/translator_fo
 reloaded_reverse = tf.saved_model.load(default_path.as_posix() + "/translator_reverse")
 
 
+def _unpickle_with_keras_fallback(path):
+    try:
+        return pickle.load(open(path, "rb"))
+    except (ImportError, ModuleNotFoundError):
+        import tensorflow.keras.preprocessing.text
+        import tf_keras.src.preprocessing
+        import sys
+
+        sys.modules["keras.preprocessing.text"] = tensorflow.keras.preprocessing.text
+        sys.modules["keras.src.preprocessing"] = tf_keras.src.preprocessing
+        return pickle.load(open(path, "rb"))
+
+
 def load_forward_translation_utils() -> tuple:
     """Loads essential utilities for forward translation, including input and
     target tokenizers and the maximum input length.
@@ -58,11 +71,11 @@ def load_forward_translation_utils() -> tuple:
         pickle.UnpicklingError: If there is an error while unpickling the tokenizer files.
     """
     # Load important pickle files which consists the tokenizers and the maxlength setting
-    inp_lang = pickle.load(
-        open(default_path.as_posix() + "/assets/tokenizer_input.pkl", "rb")
+    inp_lang = _unpickle_with_keras_fallback(
+        default_path.as_posix() + "/assets/tokenizer_input.pkl"
     )
-    targ_lang = pickle.load(
-        open(default_path.as_posix() + "/assets/tokenizer_target.pkl", "rb")
+    targ_lang = _unpickle_with_keras_fallback(
+        default_path.as_posix() + "/assets/tokenizer_target.pkl"
     )
     inp_max_length = 602
     return inp_lang, targ_lang, inp_max_length
@@ -85,11 +98,12 @@ def load_reverse_translation_utils() -> tuple:
         FileNotFoundError: If any of the pickle files cannot be found.
         pickle.UnpicklingError: If there is an error unpickling the files.
     """
-    targ_lang = pickle.load(
-        open(default_path.as_posix() + "/assets/tokenizer_input.pkl", "rb")
+
+    targ_lang = _unpickle_with_keras_fallback(
+        default_path.as_posix() + "/assets/tokenizer_input.pkl"
     )
-    inp_lang = pickle.load(
-        open(default_path.as_posix() + "/assets/tokenizer_target.pkl", "rb")
+    inp_lang = _unpickle_with_keras_fallback(
+        default_path.as_posix() + "/assets/tokenizer_target.pkl"
     )
     inp_max_length = 602
     return inp_lang, targ_lang, inp_max_length

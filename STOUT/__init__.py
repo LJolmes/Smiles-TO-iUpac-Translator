@@ -26,6 +26,13 @@ please raise a issue on the Github repository.
 
 """
 
+import os
+
+# Use Keras 2 instead of 3, see
+# https://blog.tensorflow.org/2024/03/whats-new-in-tensorflow-216.html
+os.environ["TF_USE_LEGACY_KERAS"] = "1"
+del os
+
 __version__ = "2.1.0"
 
 __all__ = [

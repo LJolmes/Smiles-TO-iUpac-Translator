@@ -6,9 +6,9 @@ import platform
 if (
     platform.processor() == "arm" or platform.processor() == "i386"
 ) and platform.system() == "Darwin":
-    tensorflow_os = "tensorflow-macos==2.15.0"
+    tensorflow_os = ["tensorflow-macos>=2.10.0"]
 else:
-    tensorflow_os = "tensorflow==2.15.0"
+    tensorflow_os = ["tensorflow>=2.12.0"]
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -26,8 +26,9 @@ setuptools.setup(
     url="https://github.com/Kohulan/Smiles-TO-iUpac-Translator",
     packages=setuptools.find_packages(),
     license="MIT",
-    install_requires=[
-        tensorflow_os,
+    install_requires=tensorflow_os
+    + [
+        "tf-keras~=2.16",
         "pystow",
         "unicodedata2",
         "jpype1",
