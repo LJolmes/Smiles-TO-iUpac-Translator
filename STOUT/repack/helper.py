@@ -259,9 +259,11 @@ def download_trained_weights(model_url: str, model_path: str, verbose=1):
     # Download trained models
     if verbose > 0:
         print("Downloading trained model to " + str(model_path))
-        model_path = pystow.ensure("STOUT-V2", url=model_url)
-        print(model_path)
+
+    model_path = pystow.ensure("STOUT-V2", url=model_url)
+
     if verbose > 0:
-        print("... done downloading trained model!")
-        with zipfile.ZipFile(model_path.as_posix(), "r") as zip_ref:
-            zip_ref.extractall(model_path.parent.as_posix())
+        print(f"... done downloading trained model to {model_path}!")
+
+    with zipfile.ZipFile(model_path.as_posix(), "r") as zip_ref:
+        zip_ref.extractall(model_path.parent.as_posix())

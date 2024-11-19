@@ -28,10 +28,10 @@ default_path = pystow.join("STOUT-V2", "models")
 # model download location
 model_url = "https://zenodo.org/records/12542360/files/models.zip?download=1"
 model_path = str(default_path) + "/translator_forward/"
-print(model_path)
+
 # download models to a default location
 if not os.path.exists(model_path):
-    helper.download_trained_weights(model_url, default_path)
+    helper.download_trained_weights(model_url, default_path, verbose=0)
 
 
 # Load the packed model forward
