@@ -5,6 +5,7 @@ import os
 import pickle
 import pystow
 import logging
+from functools import cache
 from .repack import helper
 
 # Silence tensorflow model loading warnings.
@@ -53,6 +54,7 @@ def _unpickle_with_keras_fallback(path):
         return pickle.load(open(path, "rb"))
 
 
+@cache
 def load_forward_translation_utils() -> tuple:
     """Loads essential utilities for forward translation, including input and
     target tokenizers and the maximum input length.
@@ -81,6 +83,7 @@ def load_forward_translation_utils() -> tuple:
     return inp_lang, targ_lang, inp_max_length
 
 
+@cache
 def load_reverse_translation_utils() -> tuple:
     """Loads necessary utilities for reverse translation from pickle files.
 
